@@ -55,6 +55,17 @@ $(function () {
     createPlatform(380,640,50,50);
     createPlatform(380,590,50,50);
 
+    createPlatform(500,500,300,20);
+
+    createPlatform(850,590,50,50);
+    createPlatform(850,640,50,50);
+    createPlatform(850,690,50,50);
+
+    createPlatform(900,690,50,50);
+    createPlatform(900,640,50,50);
+
+    createPlatform(950,690,50,50);
+
     // TODO 2
     // Create collectables
     // You must decide on the collectable type, the x position, the y position, the gravity, and the bounce strength
