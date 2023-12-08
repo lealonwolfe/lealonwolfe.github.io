@@ -78,9 +78,9 @@ $(function () {
     // Your collectable choices are 'database' 'diamond' 'grace' 'kennedi' 'max' and 'steve'; more can be added if you wish
     // example usage: createCollectable(type, x, y, gravity, bounce)
 
-    createCollectable("grace",450,380,1,1);
-    createCollectable("grace",800,380,1,1);
-    createCollectable("grace",1300,700,1,0);
+    createCollectable("coins",450,380,1,1);
+    createCollectable("coins",800,380,1,1);
+    createCollectable("coins",1300,700,1,0);
     // TODO 3
     // Create cannons
     // You must decide the wall you want the cannon on, the position on the wall, and the time between shots in milliseconds
@@ -88,11 +88,11 @@ $(function () {
     // example usage: createCannon(side, position, delay, width, height)
 
     
-    createCannon("bottom", 600, 2000);
-    createCannon("bottom", 500, 2000);
-    createCannon("bottom", 400, 2000);
-    createCannon("bottom", 700, 2000);
-    createCannon("bottom", 750, 2000);
+    createCannon("bottom", 600, 2500);
+    createCannon("bottom", 500, 2500);
+    createCannon("bottom", 400, 2500);
+    createCannon("bottom", 700, 2500);
+    createCannon("bottom", 750, 2500);
     
 
 
