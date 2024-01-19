@@ -7,7 +7,12 @@
 	<style>
 		
 		body{
-			background-image: url("paper.gif");
+			background-image: url("img/weezer.png");
+			 -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+			background-repeat: no-repeat;
 		}
 			
 		.box {
@@ -53,8 +58,9 @@
 			box.on('click', handleBoxClick);
 
 			// moves the Box to a new position on the screen along the X-Axis
-			function moveBoxTo(newPositionX) {
+			function moveBoxTo(newPositionX, newPositionY) {
 				box.css("left", newPositionX);
+				box.css('top', newPositionY)
 			}
 
 			// changes the text displayed on the Box
@@ -70,7 +76,10 @@
 			
 			var positionX = 0;
 			var points = 0;
-			var speed = 10
+			var speed = 5;
+			var positionY = 0;
+			var speedY = 5;
+			var boardHeight = jQuery(window).height(); 
 
 			/* 
 			This Function will be called 20 times/second. Each time it is called,
@@ -78,8 +87,9 @@
 			turn it around! 
 			*/
 			function update() {
-				positionX=positionX+speed
-				moveBoxTo(positionX);
+				positionX=positionX+speed;
+				positionY=positionY+speedY;
+				moveBoxTo(positionX,positionY);
 
 				if(positionX<0){
 					speed = -speed;
@@ -87,6 +97,14 @@
 
 				if(positionX>boardWidth){
 					speed = -speed;
+				}
+
+				if(positionY>900){
+					speedY = -speedY;
+				}
+
+				if(positionY<0){
+					speedY = -speedY;
 				}
 
 
@@ -100,11 +118,19 @@
 			function handleBoxClick() {
 				points = points+1;
 				positionX = 0;
+
+				positionY = 0;
 				changeBoxText(points);	
 				if(speed>0){
-					speed=speed+3;}
+					speed=speed+1.5;}
 				else{
-					speed=speed-3;
+					speed=speed-1.5;
+				}
+
+				if(speedY>0){
+					speedY=speedY+1.5;}
+				else{
+					speedY=speedY-1.5;
 				}
 			
 			};
