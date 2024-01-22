@@ -74,12 +74,13 @@
 			
 			// TODO 2 - Variable declarations 
 			
-			var positionX = 0;
+			var positionX = Math.random() * boardWidth;
 			var points = 0;
 			var speed = 5;
-			var positionY = 0;
+			var positionY = Math.random() * boardHeight-100;
 			var speedY = 5;
 			var boardHeight = jQuery(window).height(); 
+		
 
 			/* 
 			This Function will be called 20 times/second. Each time it is called,
@@ -116,11 +117,19 @@
 			the left side of the screen.
 			*/
 			function handleBoxClick() {
-				points = points+1;
-				positionX = 0;
 
-				positionY = 0;
+
+				points = points+1;
+				positionX = Math.random(0,100) * boardWidth;
+
+				positionY = Math.random(0,100) * boardHeight-100;
+
+				
+				
+
 				changeBoxText(points);	
+
+				if(points%3 === 0){
 				if(speed>0){
 					speed=speed+1.5;}
 				else{
@@ -131,6 +140,19 @@
 					speedY=speedY+1.5;}
 				else{
 					speedY=speedY-1.5;
+				}
+				
+		
+
+			}
+
+				var R = Math.random(0,255) * 100;
+				var G = Math.random(0,255) * 100;
+				var B = Math.random(0,255) * 100;
+
+				if(points%3 === 0){
+					var colorStr = "rgb("+R+","+G+","+B+")";
+					box.css('background-color', colorStr);
 				}
 			
 			};
