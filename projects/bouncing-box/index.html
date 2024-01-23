@@ -74,7 +74,7 @@
 			
 			// TODO 2 - Variable declarations 
 			
-			var positionX = Math.random() * boardWidth;
+			var positionX = Math.random() * boardWidth-100;
 			var points = 0;
 			var speed = 5;
 			var positionY = Math.random() * boardHeight-100;
@@ -96,11 +96,11 @@
 					speed = -speed;
 				}
 
-				if(positionX>boardWidth){
+				if(positionX>boardWidth-50){
 					speed = -speed;
 				}
 
-				if(positionY>900){
+				if(positionY>1010){
 					speedY = -speedY;
 				}
 
@@ -118,11 +118,12 @@
 			*/
 			function handleBoxClick() {
 
-
+				var ran1 = Math.random(0,100) * boardWidth-200;
+				var ran2 = Math.random(0,100) * boardHeight-200;
 				points = points+1;
-				positionX = Math.random(0,100) * boardWidth;
+				positionX = ran1+100
 
-				positionY = Math.random(0,100) * boardHeight-100;
+				positionY = ran2+100;
 
 				
 				
@@ -141,7 +142,7 @@
 				else{
 					speedY=speedY-1.5;
 				}
-				
+
 		
 
 			}
