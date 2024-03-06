@@ -91,14 +91,14 @@ var init = function (window) {
                 circle.x = canvas.width;
             }
 
-          /*  if(circle.y > canvas.height){
+            if(circle.y > canvas.height){
                 circle.y = 0;
             }
 
             if(circle.y < 0){
                 circle.y = canvas.height;
             }
-            */
+            
 
             // YOUR TODO 6 CODE ENDS HERE //////////////////////////
         }
