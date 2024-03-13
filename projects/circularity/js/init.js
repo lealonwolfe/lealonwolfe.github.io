@@ -24,16 +24,16 @@ var init = function (window) {
         var circles = [];
         // TODO 2 : Create a function that draws a circle 
         function drawCircle(){
-            circle = draw.randomCircleInArea(canvas, true, true, "#999", 2);
-            physikz.addRandomVelocity(circle, canvas);
-            view.addChild(circle);
-            circles.push(circle);
+            circle = draw.randomCircleInArea(canvas, true, true, "#999", 2);//uses an existaning draw function to draw a circle of random size,color, and location. it sores it
+            physikz.addRandomVelocity(circle, canvas);//uses physikz library to add random velocity and direction to circle
+            view.addChild(circle);//adds the circle as a child of view so that circle appears on screen
+            circles.push(circle);//saves the circle to an array of circles by pushing it to the end of the array
         }
 
         // TODO 3 / 7 : Call the drawCircle() function 
-        
+     
         for(var i = 0; i <= 100; i++){
-        drawCircle();
+        drawCircle();//   draws 100 circles
     }
         
 
@@ -63,10 +63,11 @@ var init = function (window) {
 */
             // TODO 8/9 : Iterate over the array
            
+            //runs the two functions for every value of i
             for (var i = 0; i < circles.length; i++) {
                 
-                physikz.updatePosition(circles[i]);
-                game.checkCirclePosition(circles[i]);
+                physikz.updatePosition(circles[i]);//updates the position of the circles
+                game.checkCirclePosition(circles[i]);//checks the circles positions
               }
             
         }
@@ -82,18 +83,25 @@ var init = function (window) {
             
 
             // TODO 6 : YOUR CODE STARTS HERE //////////////////////
-            
+          
+            //if circle goes off the right, it moves it to the left side
             if ( circle.x > canvas.width ) {
                 circle.x = 0;
             }
+
+            //if circle goes off left side, it moves it right
 
             if(circle.x < 0){
                 circle.x = canvas.width;
             }
 
+            //if circle goes off the bottom, the circle is moved to the top
+
             if(circle.y > canvas.height){
                 circle.y = 0;
             }
+
+            //if the circle goes off the top, its moved to the bottom
 
             if(circle.y < 0){
                 circle.y = canvas.height;
