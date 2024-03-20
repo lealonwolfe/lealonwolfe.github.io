@@ -32,15 +32,15 @@
         of = 0;
         
         hud = new createjs.Container();
-        
+        //creates hud box
         integrity = new createjs.Container();
         background = draw.rect(104, 20, '#CCC');
         draw.rect(102, 18, '#FFF', null, null, 1, 1, background);
         integrity.addChild(background);
-        
+        //holds score
         txtScore = draw.textfield('score : 000', "19px Arial", '#666', 'left');
         hud.addChild(txtScore);
-        
+        //makes health bar
         integrityMeter = draw.rect(1, 16, '#3333CC');
         integrityMeter.scaleX = 100;
         integrity.addChild(integrityMeter);
