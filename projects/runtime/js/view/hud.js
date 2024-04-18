@@ -41,7 +41,7 @@
         txtScore = draw.textfield('score : 000', "19px Arial", '#666', 'left');
         hud.addChild(txtScore);
         //makes health bar
-        integrityMeter = draw.rect(1, 16, '#3333CC');
+        integrityMeter = draw.rect(1, 16, 'red');
         integrityMeter.scaleX = 100;
         integrity.addChild(integrityMeter);
         hud.addChild(integrity);
