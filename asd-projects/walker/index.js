@@ -31,23 +31,10 @@ function runProgram(){
     SPACE:32
   }
   // Game Item Objects
-var walker = {
-  positionX:0,
-  positionY:0,
-  speedX:0,
-  speedY:0,
-  width: WALKER_WIDTH,
-  height: WALKER_HEIGHT
-}
+  var walker = Walker("#walker",0,0,0, 0,WALKER_WIDTH,WALKER_HEIGHT)
+  var walker2 = Walker("#walker2",BOARD_WIDTH - 50,0,0, 0,WALKER_WIDTH,WALKER_HEIGHT)
 
-  var walker2 = {
-    positionX: BOARD_WIDTH - 50,
-    positionY:0,
-    speedX:0,
-    speedY:0,
-    width: WALKER_WIDTH,
-    height: WALKER_HEIGHT
-}
+
 
   // one-time setup
   var interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
@@ -63,9 +50,12 @@ var walker = {
   by calling this function and executing the code inside.
   */
   function newFrame() {
-    repositionBox();
-    redrawBox();
-    wallCollision();
+    repositionBox(walker);
+    repositionBox(walker2);
+    redrawBox(walker);
+    redrawBox(walker2);
+    wallCollision(walker);
+    wallCollision(walker2);
     showResult(walkerCollide(walker,walker2));
   }
   
@@ -150,38 +140,38 @@ console.log(event.which);
   ////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
 
-
-function repositionBox(){
-  walker.positionX += walker.speedX;
-  walker.positionY += walker.speedY;
-
-  walker2.positionX += walker2.speedX;
-  walker2.positionY += walker2.speedY;
+function Walker(id,posX,posY,speedX,speedY,width,height){
+  return{
+    id:id,
+    positionX: posX,
+    positionY:posY,
+    speedX:speedX,
+    speedY:speedY,
+    width: width,
+    height: height
+  }
 }
 
-function redrawBox(){
-  $("#walker").css("left", walker.positionX)
-  $("#walker").css("top", walker.positionY)
+function repositionBox(obj){
+  obj.positionX += obj.speedX;
+  obj.positionY += obj.speedY;
+}
 
-  $("#walker2").css("left", walker2.positionX)
-  $("#walker2").css("top", walker2.positionY)
+function redrawBox(obj){
+  $(obj.id).css("left", obj.positionX)
+  $(obj.id).css("top", obj.positionY)
 }
 
 
 
-function wallCollision(){
-  if(walker.positionX > BOARD_WIDTH - WALKER_WIDTH||walker.positionX < 0){
-    walker.positionX -= walker.speedX
+function wallCollision(obj){
+  if(obj.positionX > BOARD_WIDTH - WALKER_WIDTH||obj.positionX < 0){
+    obj.positionX -= obj.speedX
   }
-  if(walker.positionY > BOARD_HEIGHT- WALKER_HEIGHT||walker.positionY < 0){
-    walker.positionY -= walker.speedY
+  if(obj.positionY > BOARD_HEIGHT- WALKER_HEIGHT||obj.positionY < 0){
+    obj.positionY -= obj.speedY
   }
-  if(walker2.positionX > BOARD_WIDTH - WALKER_WIDTH||walker2.positionX < 0){
-    walker2.positionX -= walker2.speedX
-  }
-  if(walker2.positionY > BOARD_HEIGHT- WALKER_HEIGHT||walker2.positionY < 0){
-    walker2.positionY -= walker2.speedY
-  }
+
 
 }
 
