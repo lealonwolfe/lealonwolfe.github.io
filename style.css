@@ -33,7 +33,7 @@ h1 {
 }
 a {
     text-decoration: none;
-    color: #fff;
+    color: rgb(255, 255, 255);
 }
 
 /* main container area beneath menu */
@@ -79,7 +79,7 @@ h2, h3 {
 }
 
 #portfolio li:hover {
-    background: #eee;
+    background: rgb(238, 238, 238);
 }
 
 #portfolio a {
