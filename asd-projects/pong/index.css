@@ -29,6 +29,7 @@ body {
 #scoreBoard {
   width: 500px;
   height: 100px;
+  border-radius: 5px;
   border: 1px solid white;
   background-color: rgb(95, 18, 137);
   position: relative;
@@ -52,23 +53,17 @@ body {
   top: 10px;
   font-size: large;  
 }
-
-#leftPaddle {
-  background-color: teal;
+.paddle{
   width: 20px;
   height: 80px;
   position: absolute;
-  left: 430px; 
-  top: 100px;  
+}
+#leftPaddle {
+  background-color: teal; 
 }
 
 #rightPaddle {
   background-color: rgb(255, 255, 255);
-  width: 20px;
-  height: 80px;
-  position: absolute;
-   left: 50px; 
-   top: 100px;  
 }
 
 

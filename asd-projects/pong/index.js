@@ -25,11 +25,11 @@ function runProgram(){
 
   // Game Item Objects
 
-  var leftPaddle = makeGameItem("#leftPaddle",0,0)
-  var rightPaddle = makeGameItem("#rightPaddle",0,0)
+  var leftPaddle = makeGameItem("#leftPaddle",50,(BOARD_HEIGHT/2) - ($("#rightPaddle").height() / 2),0,0)
+  var rightPaddle = makeGameItem("#rightPaddle",BOARD_WIDTH- $("#rightPaddle").width()- 50,(BOARD_HEIGHT/2) - ($("#rightPaddle").height() / 2),0,0)
   var leftScore = makeTextObj("#leftScore")
   var rightScore = makeTextObj("#rightScore")
-  var ball = makeGameItem("#ball",0,0)
+  var ball = makeGameItem("#ball",(BOARD_HEIGHT/2) - ($("#ball").width() / 2),(BOARD_HEIGHT/2) - ($("#ball").height() / 2),0,0)
 
   // one-time setup
   let interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
@@ -125,11 +125,14 @@ ball.speedY = 1
 
 }
 
+function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
 
-function makeGameItem(id,speedX,speedY){
+function makeGameItem(id,x,y,speedX,speedY){
   return{
-    x:parseFloat($(id).css("left")),
-    y:parseFloat($(id).css("top")),
+    x:x,
+    y:y,
     width:$(id).width(),
     height:$(id).height(),
     speedX:speedX,
@@ -212,14 +215,26 @@ function paddleCollisionDetection(paddle,ball){
   makeHitbox(paddle);
   makeHitbox(ball);
 
-  if(
+
+
+  
+
+if(
     ball.rightX > paddle.leftX &&
     ball.leftX < paddle.rightX &&
     ball.bottomY > paddle.topY &&
     ball.topY < paddle.bottomY 
   ){
-    ball.speedX = -ball.speedX;
-    ball.speedY = -ball.speedY;
+    if(paddle.x > 100){
+      var offset = getRndInteger(-150, -150)/100;
+      ball.speedX = -ball.speedX + offset;
+      ball.speedY = -ball.speedY + offset;
+    }else if (paddle.x < 100){
+      var offset = getRndInteger(-150, -150)/100;
+      ball.speedX = -ball.speedX - offset;
+      ball.speedY = -ball.speedY - offset;
+    }
+    
     }
 
 
