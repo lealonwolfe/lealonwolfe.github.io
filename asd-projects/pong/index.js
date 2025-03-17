@@ -19,7 +19,8 @@ function runProgram(){
     W:87, 
     S:83,
     ENTER:13,
-    SPACE:32
+    SPACE:32,
+    ESC:27
   }
 
 
@@ -35,6 +36,8 @@ function runProgram(){
   let interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
   $(document).on('keydown', handleKeyDown);                           // change 'eventType' to the type of event you want to handle
   $(document).on('keyup', handleKeyUp);                        // change 'eventType' to the type of event you want to handle
+  $("#restartButton").on("click", restartButton);
+
 
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////// CORE LOGIC ///////////////////////////////////////////
@@ -84,6 +87,9 @@ function runProgram(){
     if(event.which === KEY.SPACE){
       startGame();
     }
+    if(event.which === KEY.ESC){
+      endGame();
+    }
   }
 
   function handleKeyUp(event){
@@ -124,11 +130,6 @@ ball.speedX = 5;
 ball.speedY = 1
 
 }
-
-function getRndInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
-
 function makeGameItem(id,x,y,speedX,speedY){
   return{
     x:x,
@@ -141,7 +142,6 @@ function makeGameItem(id,x,y,speedX,speedY){
 
   }
 }
-
 function makeTextObj(id){
   return{
   x:parseFloat($(id).css("left")),
@@ -152,28 +152,23 @@ function makeTextObj(id){
   text:0
   }
 }
-
 function moveGameItem(gameItem){
   gameItem.x += gameItem.speedX;
   gameItem.y += gameItem.speedY;
   
 }
-
 function drawGameItem(gameItem){
   gameItem.id.css("left",gameItem.x);
   gameItem.id.css("top",gameItem.y);
 }
-
 function makeHitbox(gameItem){
   gameItem.leftX = gameItem.x;
   gameItem.topY = gameItem.y;
   gameItem.rightX = gameItem.x + gameItem.width;
   gameItem.bottomY = gameItem.y + gameItem.height
 }
-
 function wallCollisionDetect(gameItem){
   makeHitbox(gameItem)
-
   if(gameItem.topY < 0){
     //gameItem.y -= gameItem.speedY;
     return("top");
@@ -191,11 +186,7 @@ function wallCollisionDetect(gameItem){
     //gameItem.x -= gameItem.speedX;
     return("right");
   }
-    
-  
-
 }
-  
 function PaddleLogic(gameItem){
 moveGameItem(gameItem);
 drawGameItem(gameItem);
@@ -205,46 +196,25 @@ if(wallCollisionDetect(gameItem) === "top"){
 if(wallCollisionDetect(gameItem) === "bottom"){
   gameItem.y -= gameItem.speedY + 1; 
 }
-
-
-
 }
-
-
 function paddleCollisionDetection(paddle,ball){
   makeHitbox(paddle);
   makeHitbox(ball);
-
-
-
-  
-
-if(
+  if(
     ball.rightX > paddle.leftX &&
     ball.leftX < paddle.rightX &&
     ball.bottomY > paddle.topY &&
     ball.topY < paddle.bottomY 
   ){
-    if(paddle.x > 100){
-      var offset = getRndInteger(-150, -150)/100;
-      ball.speedX = -ball.speedX + offset;
-      ball.speedY = -ball.speedY + offset;
-    }else if (paddle.x < 100){
-      var offset = getRndInteger(-150, -150)/100;
-      ball.speedX = -ball.speedX - offset;
-      ball.speedY = -ball.speedY - offset;
+      let offsetX = (Math.random() * 2 - 1) * 2; 
+      let offsetY = (Math.random() * 2 - 1) * 2; 
+      ball.speedX = -ball.speedX + offsetX;
+      ball.speedY = ball.speedY + offsetY;
     }
-    
-    }
-
-
 }
-
 function ballLogic(ball,paddle1,paddle2){
-  
   paddleCollisionDetection(paddle1,ball)
   paddleCollisionDetection(paddle2,ball)  
-
   if(wallCollisionDetect(ball) === "bottom"){
     ball.speedY = -ball.speedY;
   }
@@ -259,15 +229,12 @@ score(rightScore);
   }
   moveGameItem(ball);
   drawGameItem(ball);
-
 }
-
 function score(score){
   score.text += 1;
   score.id.text(score.text)
   startGame()
 }
-
 function winDetection(){
 
 if(leftScore.text >= 7){
@@ -276,27 +243,44 @@ if(leftScore.text >= 7){
 if(rightScore.text >= 7){return("right")}
 
 }
-
 function winScreen(){
   if(winDetection() === "left"){
-    if(window.confirm("left won, restart to play again")){
-      endGame();
-    }}
-  if(winDetection() === "right, restart to play again"){
-    if(window.confirm("right won")){
-    endGame();
-    }
- 
+    $("#winText").text("Left Won");
+    $("#board").hide();
+    $("#winBoard").show();
+    $("#instructions").hide;
+    stopGame();
+  }
+  if(winDetection() === "right"){
+    $("#winText").text("Right Won");  
+    $("#board").hide();
+    $("#winBoard").show();
+    $("#instructions").hide;
+    stopGame();
   }
 }
+function restartButton(){
+  console.log("game reset, scores - left: " + leftScore.text + " right: " + rightScore.text);
+  ball.x = 250;
+  ball.y = 250;
+  leftScore.text = 0;
+  rightScore.text = 0;
+  leftScore.id.text("0");
+  rightScore.id.text("0");
+  $("#winBoard").hide();
+  $("#board").show();
+  $("#instructions").show;
+}
 
+function stopGame(){
+ball.speedX = 0;
+ball.speedY = 0;
 
+}
   function endGame() {
     // stop the interval timer
-    clearInterval(interval);
-
+   clearInterval(interval);
     // turn off event handlers
-    $(document).off();
+   $(document).off();
   }
-  
 }
