@@ -261,6 +261,7 @@ function winScreen(){
 }
 function restartButton(){
   console.log("game reset, scores - left: " + leftScore.text + " right: " + rightScore.text);
+  $("#list").append($("<li>", { text: "left: " + leftScore.text + " right: " + rightScore.text }));
   ball.x = 250;
   ball.y = 250;
   leftScore.text = 0;
