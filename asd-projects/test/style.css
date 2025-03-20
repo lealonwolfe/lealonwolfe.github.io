@@ -1,0 +1,25 @@
+body {
+  background: radial-gradient(circle, #0e0722, #100919);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  }
+  
+  #board {
+    width: 500px;
+    height: 500px;
+
+    position: relative;
+  }
+
+  #canvas{
+    background-color: white;
+    border: 5px solid rgb(0, 0, 0);
+    
+  }

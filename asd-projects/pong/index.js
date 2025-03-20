@@ -31,14 +31,15 @@ function runProgram(){
   var leftScore = makeTextObj("#leftScore")
   var rightScore = makeTextObj("#rightScore")
   var ball = makeGameItem("#ball",(BOARD_HEIGHT/2) - ($("#ball").width() / 2),(BOARD_HEIGHT/2) - ($("#ball").height() / 2),0,0)
+  var gameMode = "2P"
 
   // one-time setup
   let interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
   $(document).on('keydown', handleKeyDown);                           // change 'eventType' to the type of event you want to handle
   $(document).on('keyup', handleKeyUp);                        // change 'eventType' to the type of event you want to handle
   $("#restartButton").on("click", restartButton);
-
-
+  $("#AIButton").on("click", AIButton);
+  $("#PlayerButton").on("click", playerButton);
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////// CORE LOGIC ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -49,12 +50,16 @@ function runProgram(){
   */
   function newFrame() {
 
-
+  handleGameModes()
   PaddleLogic(leftPaddle);
   PaddleLogic(rightPaddle);
   ballLogic(ball,rightPaddle,leftPaddle);
+
   winScreen();
   
+
+
+
   }
   
   /* 
@@ -64,7 +69,7 @@ function runProgram(){
 
 
  
-  
+  if(gameMode = "2p"){
     if(event.which === KEY.UP){
       rightPaddle.speedY = -5
     }
@@ -74,6 +79,8 @@ function runProgram(){
     if(event.which === KEY.DOWN){
       rightPaddle.speedY = 5
     }
+  }
+    
   
     
     
@@ -95,18 +102,17 @@ function runProgram(){
   function handleKeyUp(event){
 
 
-  
-    if(event.which === KEY.UP){
-      rightPaddle.speedY = 0
-    }
+    if(gameMode = "2p"){
+      if(event.which === KEY.UP){
+        rightPaddle.speedY = 0
+      }
+      
     
-   
-    
-    if(event.which === KEY.DOWN){
-      rightPaddle.speedY = 0
-    }
-   
-    
+      
+      if(event.which === KEY.DOWN){
+        rightPaddle.speedY = 0
+      }
+  }
     if(event.which === KEY.W){
       leftPaddle.speedY = 0;
     }
@@ -121,6 +127,34 @@ function runProgram(){
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
+function AIButton(){
+  gameMode = "AI"
+}
+function playerButton(){
+  gameMode = "2P"
+}
+
+function handleGameModes(){
+
+  
+  
+  if(gameMode === "AI"){
+    if(ball.x > (BOARD_WIDTH/2)){
+      if(ball.y < rightPaddle.topY ){rightPaddle.speedY = -5;}
+      else if(ball.y > rightPaddle.bottomY){rightPaddle.speedY = 5;}
+      else {rightPaddle.speedY = 0;}
+      
+        
+      
+    }
+  }
+
+}
+
+
+
+
+
 
 
 function startGame(){
