@@ -117,7 +117,6 @@ body {
 }
 
 #AIButton:hover {
-  background: linear-gradient(135deg,  #0e0722, #100919);
   transform: scale(1.1);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
@@ -141,7 +140,6 @@ body {
 }
 
 #playerButton:hover {
-  background: linear-gradient(135deg,  #0e0722, #100919);
   transform: scale(1.1);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }

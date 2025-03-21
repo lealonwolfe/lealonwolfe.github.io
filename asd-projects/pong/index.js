@@ -32,6 +32,7 @@ function runProgram(){
   var rightScore = makeTextObj("#rightScore")
   var ball = makeGameItem("#ball",(BOARD_HEIGHT/2) - ($("#ball").width() / 2),(BOARD_HEIGHT/2) - ($("#ball").height() / 2),0,0)
   var gameMode = "2P"
+  var winScore = 7;
 
   // one-time setup
   let interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
@@ -39,7 +40,7 @@ function runProgram(){
   $(document).on('keyup', handleKeyUp);                        // change 'eventType' to the type of event you want to handle
   $("#restartButton").on("click", restartButton);
   $("#AIButton").on("click", AIButton);
-  $("#PlayerButton").on("click", playerButton);
+  $("#playerButton").on("click", playerButton);
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////// CORE LOGIC ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -69,15 +70,15 @@ function runProgram(){
 
 
  
-  if(gameMode = "2p"){
+  if(gameMode === "2P"){
     if(event.which === KEY.UP){
-      rightPaddle.speedY = -5
+      rightPaddle.speedY = -5;
     }
     
   
     
     if(event.which === KEY.DOWN){
-      rightPaddle.speedY = 5
+      rightPaddle.speedY = 5;
     }
   }
     
@@ -85,10 +86,10 @@ function runProgram(){
     
     
     if(event.which === KEY.W){
-      leftPaddle.speedY = -5
+      leftPaddle.speedY = -5;
     }
     if(event.which === KEY.S){
-      leftPaddle.speedY = 5
+      leftPaddle.speedY = 5;
     }
  
     if(event.which === KEY.SPACE){
@@ -102,15 +103,15 @@ function runProgram(){
   function handleKeyUp(event){
 
 
-    if(gameMode = "2p"){
+    if(gameMode === "2P"){
       if(event.which === KEY.UP){
-        rightPaddle.speedY = 0
+        rightPaddle.speedY = 0;
       }
       
     
       
       if(event.which === KEY.DOWN){
-        rightPaddle.speedY = 0
+        rightPaddle.speedY = 0;
       }
   }
     if(event.which === KEY.W){
@@ -128,21 +129,28 @@ function runProgram(){
   ////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
 function AIButton(){
-  gameMode = "AI"
+  gameMode = "AI";
 }
 function playerButton(){
-  gameMode = "2P"
+  gameMode = "2P";
 }
 
 function handleGameModes(){
 
-  
+ if(gameMode ==="2P"){
+  $("#playerButton").css("background","linear-gradient(135deg, #957fd0, #8e66be)");
+     $("#AIButton").css("background","linear-gradient(135deg, #0e0722, #100919)");
+    
+ } else if (gameMode === "AI"){
+  $("#AIButton").css("background","linear-gradient(135deg, #957fd0, #8e66be)");
+  $("#playerButton").css("background","linear-gradient(135deg, #0e0722, #100919)");
+ }
   
   if(gameMode === "AI"){
     if(ball.x > (BOARD_WIDTH/2)){
       if(ball.y < rightPaddle.topY ){rightPaddle.speedY = -5;}
-      else if(ball.y > rightPaddle.bottomY){rightPaddle.speedY = 5;}
-      else {rightPaddle.speedY = 0;}
+      if(ball.y > rightPaddle.bottomY){rightPaddle.speedY = 5;}
+      if(ball.y> rightPaddle.topY && ball.y < rightPaddle.bottomY){rightPaddle.speedY = 0;}
       
         
       
@@ -161,7 +169,7 @@ function startGame(){
 ball.x = 250;
 ball.y = 250;
 ball.speedX = 5;
-ball.speedY = 1
+ball.speedY = 1;
 
 }
 function makeGameItem(id,x,y,speedX,speedY){
@@ -174,17 +182,18 @@ function makeGameItem(id,x,y,speedX,speedY){
     speedY:speedY,
     id:$(id)
 
-  }
+  };
 }
+
 function makeTextObj(id){
   return{
-  x:parseFloat($(id).css("left")),
-  y:parseFloat($(id).css("top")),
-  width:$(id).width(),
-  height:$(id).height(),
-  id:$(id),
-  text:0
-  }
+    x:parseFloat($(id).css("left")),
+    y:parseFloat($(id).css("top")),
+    width:$(id).width(),
+    height:$(id).height(),
+    id:$(id),
+    text:0
+  };
 }
 function moveGameItem(gameItem){
   gameItem.x += gameItem.speedX;
@@ -199,31 +208,28 @@ function makeHitbox(gameItem){
   gameItem.leftX = gameItem.x;
   gameItem.topY = gameItem.y;
   gameItem.rightX = gameItem.x + gameItem.width;
-  gameItem.bottomY = gameItem.y + gameItem.height
+  gameItem.bottomY = gameItem.y + gameItem.height;
 }
 function wallCollisionDetect(gameItem){
-  makeHitbox(gameItem)
+  makeHitbox(gameItem);
   if(gameItem.topY < 0){
-    //gameItem.y -= gameItem.speedY;
     return("top");
   }
   if(gameItem.bottomY > BOARD_HEIGHT){
-    //gameItem.y -= gameItem.speedY;
     return("bottom");
   }
   if(gameItem.leftX < 0){
-    //gameItem.x -= gameItem.speedX;
     return("left");
   }
  
   if(gameItem.rightX > BOARD_WIDTH){
-    //gameItem.x -= gameItem.speedX;
     return("right");
   }
 }
+
 function PaddleLogic(gameItem){
-moveGameItem(gameItem);
-drawGameItem(gameItem);
+  moveGameItem(gameItem);
+  drawGameItem(gameItem);
 if(wallCollisionDetect(gameItem) === "top"){
   gameItem.y -= gameItem.speedY - 1; 
 }
@@ -231,24 +237,40 @@ if(wallCollisionDetect(gameItem) === "bottom"){
   gameItem.y -= gameItem.speedY + 1; 
 }
 }
-function paddleCollisionDetection(paddle,ball){
+function paddleCollisionDetection(paddle, ball) {
   makeHitbox(paddle);
   makeHitbox(ball);
-  if(
-    ball.rightX > paddle.leftX &&
-    ball.leftX < paddle.rightX &&
-    ball.bottomY > paddle.topY &&
-    ball.topY < paddle.bottomY 
-  ){
-      let offsetX = (Math.random() * 2 - 1) * 2; 
-      let offsetY = (Math.random() * 2 - 1) * 2; 
-      ball.speedX = -ball.speedX + offsetX;
-      ball.speedY = ball.speedY + offsetY;
-    }
+
+  if (
+      ball.rightX > paddle.leftX &&
+      ball.leftX < paddle.rightX &&
+      ball.bottomY > paddle.topY &&
+      ball.topY < paddle.bottomY
+  ) {
+      // Calculate how far from the paddle center the ball hit
+      let relativeIntersectY = (ball.y + ball.height / 2) - (paddle.y + paddle.height / 2);
+      let normalizedIntersectY = relativeIntersectY / (paddle.height / 2);
+
+      // Adjust ball angle based on where it hit the paddle
+      let bounceAngle = normalizedIntersectY * (Math.PI / 4); // Max bounce angle = 45 degrees
+
+      let speed = Math.sqrt(ball.speedX ** 2 + ball.speedY ** 2); // Keep speed constant
+
+      // Reverse X direction, apply bounce angle to Y
+      ball.speedX = -Math.sign(ball.speedX) * Math.cos(bounceAngle) * speed;
+      ball.speedY = Math.sin(bounceAngle) * speed;
+
+      // Ensure ball does not clip inside paddle
+      if (ball.speedX > 0) {
+          ball.x = paddle.rightX + 1;
+      } else {
+          ball.x = paddle.leftX - ball.width - 1;
+      }
+  }
 }
 function ballLogic(ball,paddle1,paddle2){
-  paddleCollisionDetection(paddle1,ball)
-  paddleCollisionDetection(paddle2,ball)  
+  paddleCollisionDetection(paddle1,ball);
+  paddleCollisionDetection(paddle2,ball);
   if(wallCollisionDetect(ball) === "bottom"){
     ball.speedY = -ball.speedY;
   }
@@ -271,10 +293,12 @@ function score(score){
 }
 function winDetection(){
 
-if(leftScore.text >= 7){
-  return("left")
+if(leftScore.text >= winScore){
+  return("left");
 }
-if(rightScore.text >= 7){return("right")}
+if(rightScore.text >= winScore)
+  {return("right");
+  }
 
 }
 function winScreen(){
