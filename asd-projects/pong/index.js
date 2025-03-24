@@ -57,7 +57,7 @@ function runProgram(){
   ballLogic(ball,rightPaddle,leftPaddle);
 
   winScreen();
-  
+  console.log(ball.speedX)
 
 
 
@@ -130,9 +130,11 @@ function runProgram(){
   ////////////////////////////////////////////////////////////////////////////////
 function AIButton(){
   gameMode = "AI";
+  rightPaddle.speedY = 0;
 }
 function playerButton(){
   gameMode = "2P";
+  rightPaddle.speedY = 0;
 }
 
 function handleGameModes(){
@@ -154,7 +156,7 @@ function handleGameModes(){
       
         
       
-    }
+    }else {rightPaddle.speedY = 0;}
   }
 
 }
@@ -253,12 +255,12 @@ function paddleCollisionDetection(paddle, ball) {
 
       // Adjust ball angle based on where it hit the paddle
       let bounceAngle = normalizedIntersectY * (Math.PI / 4); // Max bounce angle = 45 degrees
-
+      
       let speed = Math.sqrt(ball.speedX ** 2 + ball.speedY ** 2); // Keep speed constant
 
       // Reverse X direction, apply bounce angle to Y
-      ball.speedX = -Math.sign(ball.speedX) * Math.cos(bounceAngle) * speed;
-      ball.speedY = Math.sin(bounceAngle) * speed;
+      ball.speedX = (-Math.sign(ball.speedX) * Math.cos(bounceAngle) * speed) * 1.05;
+      ball.speedY = (Math.sin(bounceAngle) * speed) * 1.05 ;
 
       // Ensure ball does not clip inside paddle
       if (ball.speedX > 0) {

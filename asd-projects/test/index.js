@@ -35,12 +35,9 @@ var colors = {
     
 }
 var groundLvl = 270;
-var player = playerBoxObject(10,10,50,50,colors.darkPurple)
+var player = playerBoxObject(10,10,25,25,colors.darkPurple)
 var obsticles = [
-    hydrantObject(),
-    hydrantObject(),
-    hydrantObject(),   
-    hydrantObject(),
+    enemyObject()
 ]
 
 
@@ -60,17 +57,13 @@ function startCanvas(){
 
 function newFrame() {
     background("white")
-    drawObsticles(obsticles);
-    drawGround(groundLvl)
+
+
+drawObsticles(obsticles);
 
 
 
 
-
-    
-    player.speedY = 1;
-
-    if(player.y > groundLvl){}
 
 
     drawPlayerBox();
@@ -125,9 +118,9 @@ function drawObsticles(obj){
 }
 
 
-function hydrantObject(){
+function enemyObject(){
     return(
-    obsticleObject(-100,groundLvl-10,10,15,"red")
+    obsticleObject(100,100,10,10 ,"red")
     )
 }
 
@@ -144,7 +137,8 @@ return{
     topY:y,
     bottomY:y+height,
     color:color,
-    speedY:0
+    speedY:0,
+    speedX:0
     
     
     }
@@ -154,32 +148,28 @@ function drawPlayerBox(){
     fill(player.color)
     stroke(player.color)
     player.y += player.speedY;
+    player.x += player.speedX;
     drawRectangle(player.x,player.y,player.width,player.height)
 }
 
-function drawGround(y){
-    fill("grey")
-    stroke("grey")
-    drawRectangle(0,y,500,500 - y)
 
-}
 
 function handleKeyDown(event) {
 
 if(event.which === KEY.LEFT){
-
+    player.speedX = -1;
 }
 
 if(event.which === KEY.UP){
-
+    player.speedY = -1;
 }
 
 if(event.which === KEY.RIGHT){
-
+    player.speedX = 1;
 }
 
 if(event.which === KEY.DOWN){
-
+    player.speedY = 1;
 }
 
 if(event.which === KEY.A){
@@ -206,19 +196,19 @@ console.log(event.which);
     }
 function handleKeyUp(event) {
     if(event.which === KEY.LEFT){
-
+player.speedX = 0;
     }
     
     if(event.which === KEY.UP){
-
+        player.speedY = 0;
     }
     
     if(event.which === KEY.RIGHT){
-    
+        player.speedX = 0;
     }
     
     if(event.which === KEY.DOWN){
-
+        player.speedY = 0;
     }
     
     if(event.which === KEY.A){
