@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Metal+Mania&display=swap'); /* Heavy Metal Font */
+@import url('https://fonts.googleapis.com/css2?family=Nosifer&display=swap'); /* Dripping Blood Font */
+
+body {
+    background-color: #000;
+    color: #ff0000;
+    text-align: center;
+    font-family: 'Metal Mania', cursive; /* Brutal Metal Font */
+    background-image: url('images/grunge-texture.jpg'); /* Dark, grungy background */
+    background-size: cover;
+}
+
+/* 🔥 Blood-Soaked Prayer Text */
+.prayer {
+    font-size: 2.5rem;
+    text-shadow: 0px 0px 10px #ff0000, 0px 0px 20px #aa0000;
+    font-family: 'Nosifer', cursive; /* Dripping blood effect */
+    letter-spacing: 3px;
+}
+
+/* 🔱 Unholy Trinity Layout */
+#holyTrinity {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+/* 🔥 Infernal Image Styling */
+#holyTrinity img {
+    width: 230px;
+    height: auto;
+    border: 5px solid #ff0000;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px #ff0000, 0px 0px 40px #aa0000;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    filter: grayscale(100%) contrast(200%) brightness(50%);
+}
+
+/* 🤘 Brutal Glow & Un-Grayscale Hover */
+#holyTrinity img:hover {
+    transform: scale(1.2);
+    box-shadow: 0px 0px 40px #ff0000, 0px 0px 60px #aa0000;
+    filter: grayscale(0%) contrast(150%) brightness(100%);
+}
+
+/* 🩸 Hellfire Captions */
+figcaption {
+    margin-top: 10px;
+    font-size: 1.7rem;
+    color: #ff0000;
+    text-shadow: 0px 0px 5px #000, 0px 0px 10px #ff0000;
+    font-family: 'Metal Mania', cursive;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ⚫ Foggy Dark Aura */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('images/fog.gif') repeat;
+    opacity: 0.2;
+    pointer-events: none;
+}

@@ -36,6 +36,7 @@ var colors = {
 }
 var groundLvl = 270;
 var player = playerBoxObject(10,10,25,25,colors.darkPurple)
+//onscreen enemies
 var obsticles = [
     enemyObject()
 ]
