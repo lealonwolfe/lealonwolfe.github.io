@@ -19,8 +19,7 @@
     
     <div id="scoreBoard">
       <p id='leftScore'>0</p>
-      <button id="AIButton">AI Mode</button>
-      <button id="playerButton">2P Mode</button>
+  
       <p id='rightScore'>0</p>
 
     </div>
@@ -30,6 +29,25 @@
       <button type="button" id = "restartButton">
         Click to reset
     </button>
+
+    </div>
+    <div id = startBoard> 
+      <button id="AIButton">AI Mode</button>
+      <button id="playerButton">2P Mode</button>
+      <div id = "options">
+        <form  id = "optionForm" >
+          <label for="maxScore">Enter a Max Score:</label>
+          <input id="maxScore"  placeholder="7" ><br><br>
+          <label for="startBallSpeed">Enter a Ball Speed:</label>
+          <input id="startBallSpeed"  placeholder="5"><br><br>
+          <label for="paddleSpeed">Enter a paddle speed:</label>
+          <input id="paddleSpeed" placeholder="5"><br><br>
+          <button id = "submitButton">enter the game</button>
+        </form>
+      </div>
+      
+
+
 
     </div>
 

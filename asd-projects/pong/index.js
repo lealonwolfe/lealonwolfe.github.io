@@ -33,6 +33,9 @@ function runProgram(){
   var ball = makeGameItem("#ball",(BOARD_HEIGHT/2) - ($("#ball").width() / 2),(BOARD_HEIGHT/2) - ($("#ball").height() / 2),0,0)
   var gameMode = "2P"
   var winScore = 7;
+  var ballStartSpeed = 5;
+  var paddleSpeed = 5;
+  var screen = "start";
 
   // one-time setup
   let interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
@@ -41,6 +44,14 @@ function runProgram(){
   $("#restartButton").on("click", restartButton);
   $("#AIButton").on("click", AIButton);
   $("#playerButton").on("click", playerButton);
+  document.getElementById('submitButton').addEventListener('click', function(event) { 
+    event.preventDefault();
+    winScore = changeVar(winScore,"#maxScore");
+    ballStartSpeed = changeVar(ballStartSpeed,"#startBallSpeed");
+    paddleSpeed = changeVar(paddleSpeed,"#paddleSpeed");
+    screen = "board";
+  })
+
   ////////////////////////////////////////////////////////////////////////////////
   ///////////////////////// CORE LOGIC ///////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
@@ -50,22 +61,14 @@ function runProgram(){
   by calling this function and executing the code inside.
   */
   function newFrame() {
-
-  handleGameModes()
-  PaddleLogic(leftPaddle);
-  PaddleLogic(rightPaddle);
-  ballLogic(ball,rightPaddle,leftPaddle);
-
-  winScreen();
-  console.log(ball.speedX)
-
-
-
+    screenLogic();
+    handleGameModes()
+    PaddleLogic(leftPaddle);
+    PaddleLogic(rightPaddle);
+    ballLogic(ball,rightPaddle,leftPaddle);
+    winDetection();
   }
-  
-  /* 
-  Called in response to events.
-  */
+
   function handleKeyDown(event){
 
 
@@ -93,13 +96,14 @@ function runProgram(){
     }
  
     if(event.which === KEY.SPACE){
-      startGame();
+      if(ball.speedX == 0 && screen == "board"){
+        startGame();
+      }
     }
     if(event.which === KEY.ESC){
       endGame();
     }
   }
-
   function handleKeyUp(event){
 
 
@@ -128,17 +132,43 @@ function runProgram(){
   ////////////////////////////////////////////////////////////////////////////////
   ////////////////////////// HELPER FUNCTIONS ////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////
+//handles which screen is being displayed
+  function screenLogic(){
+    if(screen == "start"){
+      $("#board").hide();
+      $("#startBoard").show();
+      $("#winBoard").hide();
+    }else if(screen == "board"){
+      $("#startBoard").hide();
+      $("#board").show();
+      $("#winBoard").hide();
+    }else if(screen == "win"){
+      $("#winBoard").show();
+      $("#startBoard").hide();
+      $("#board").hide();
+    }
+  }
+  //changes a variable to what was inputed to the form under the id
+  function changeVar(v,id){
+    
+    let inputValue = $(id).val();
+    return inputValue ? Number(inputValue) : v;
+  }
+  
+//calls changes the gameMode to AI
 function AIButton(){
   gameMode = "AI";
   rightPaddle.speedY = 0;
 }
+//calls changes the gameMode to 2 player
 function playerButton(){
   gameMode = "2P";
   rightPaddle.speedY = 0;
 }
-
+//handles  the gamemodes
 function handleGameModes(){
 
+  //this changes the color of the buttons depending on which is selected
  if(gameMode ==="2P"){
   $("#playerButton").css("background","linear-gradient(135deg, #957fd0, #8e66be)");
      $("#AIButton").css("background","linear-gradient(135deg, #0e0722, #100919)");
@@ -148,6 +178,7 @@ function handleGameModes(){
   $("#playerButton").css("background","linear-gradient(135deg, #0e0722, #100919)");
  }
   
+ //this is the actual AI logic
   if(gameMode === "AI"){
     if(ball.x > (BOARD_WIDTH/2)){
       if(ball.y < rightPaddle.topY ){rightPaddle.speedY = -5;}
@@ -166,14 +197,16 @@ function handleGameModes(){
 
 
 
-
+//this sets the starting variables and begins the game
 function startGame(){
 ball.x = 250;
 ball.y = 250;
-ball.speedX = 5;
-ball.speedY = 1;
+ball.speedX = ballStartSpeed;
+ball.speedY = ballStartSpeed/5;
+
 
 }
+//creates an object for the game item described
 function makeGameItem(id,x,y,speedX,speedY){
   return{
     x:x,
@@ -186,7 +219,7 @@ function makeGameItem(id,x,y,speedX,speedY){
 
   };
 }
-
+//creates an object for the text item described
 function makeTextObj(id){
   return{
     x:parseFloat($(id).css("left")),
@@ -197,21 +230,25 @@ function makeTextObj(id){
     text:0
   };
 }
+//changes the variable for game item positions
 function moveGameItem(gameItem){
   gameItem.x += gameItem.speedX;
   gameItem.y += gameItem.speedY;
   
 }
+//changes where the game item is drawn
 function drawGameItem(gameItem){
   gameItem.id.css("left",gameItem.x);
   gameItem.id.css("top",gameItem.y);
 }
+//creates variables for the hitbox
 function makeHitbox(gameItem){
   gameItem.leftX = gameItem.x;
   gameItem.topY = gameItem.y;
   gameItem.rightX = gameItem.x + gameItem.width;
   gameItem.bottomY = gameItem.y + gameItem.height;
 }
+//returns the side a game item colides with
 function wallCollisionDetect(gameItem){
   makeHitbox(gameItem);
   if(gameItem.topY < 0){
@@ -228,7 +265,7 @@ function wallCollisionDetect(gameItem){
     return("right");
   }
 }
-
+//handles how the paddle is drawn and moved
 function PaddleLogic(gameItem){
   moveGameItem(gameItem);
   drawGameItem(gameItem);
@@ -239,7 +276,8 @@ if(wallCollisionDetect(gameItem) === "bottom"){
   gameItem.y -= gameItem.speedY + 1; 
 }
 }
-function paddleCollisionDetection(paddle, ball) {
+//handles how the paddle and ball collide
+function paddleBallCollision(paddle, ball) {
   makeHitbox(paddle);
   makeHitbox(ball);
 
@@ -270,15 +308,19 @@ function paddleCollisionDetection(paddle, ball) {
       }
   }
 }
+//handles how the ball moves and is drawn
 function ballLogic(ball,paddle1,paddle2){
-  paddleCollisionDetection(paddle1,ball);
-  paddleCollisionDetection(paddle2,ball);
+  paddleBallCollision(paddle1,ball);
+  paddleBallCollision(paddle2,ball);
+
+  //flips ball y speed when it hits vertical wall
   if(wallCollisionDetect(ball) === "bottom"){
     ball.speedY = -ball.speedY;
   }
   if(wallCollisionDetect(ball) === "top"){
     ball.speedY = -ball.speedY;
   }
+  //adds a score when ball hits horizontal wall
   if(wallCollisionDetect(ball) === "left"){
 score(rightScore);
   }
@@ -288,37 +330,31 @@ score(rightScore);
   moveGameItem(ball);
   drawGameItem(ball);
 }
+//handles when someone scores
 function score(score){
   score.text += 1;
   score.id.text(score.text)
-  startGame()
+  stopGame();
 }
+//detects and handles when someone wins
 function winDetection(){
 
-if(leftScore.text >= winScore){
-  return("left");
-}
-if(rightScore.text >= winScore)
-  {return("right");
+  if(leftScore.text >= winScore){
+    $("#winText").text("Left Won");
+    screen = "win";
+    $("#instructions").hide();
+    stopGame();
   }
+  if(rightScore.text >= winScore){
+    $("#winText").text("Right Won");  
+  screen = "win";
+  $("#instructions").hide();
+  stopGame();
+    }
+
 
 }
-function winScreen(){
-  if(winDetection() === "left"){
-    $("#winText").text("Left Won");
-    $("#board").hide();
-    $("#winBoard").show();
-    $("#instructions").hide;
-    stopGame();
-  }
-  if(winDetection() === "right"){
-    $("#winText").text("Right Won");  
-    $("#board").hide();
-    $("#winBoard").show();
-    $("#instructions").hide;
-    stopGame();
-  }
-}
+//handles the logic of the restart button
 function restartButton(){
   console.log("game reset, scores - left: " + leftScore.text + " right: " + rightScore.text);
   $("#list").append($("<li>", { text: "left: " + leftScore.text + " right: " + rightScore.text }));
@@ -328,17 +364,20 @@ function restartButton(){
   rightScore.text = 0;
   leftScore.id.text("0");
   rightScore.id.text("0");
-  $("#winBoard").hide();
-  $("#board").show();
-  $("#instructions").show;
+  screen = "board";
+  $("#instructions").show();
 }
-
+//stops the ball from moving
 function stopGame(){
+ball.x = 250;
+ball.y = 250;
 ball.speedX = 0;
 ball.speedY = 0;
+console.log("f")
 
 }
-  function endGame() {
+//turns off the game
+function endGame() {
     // stop the interval timer
    clearInterval(interval);
     // turn off event handlers
