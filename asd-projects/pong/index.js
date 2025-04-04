@@ -36,8 +36,7 @@ function runProgram(){
   var ballStartSpeed = 5;
   var paddleSpeed = 5;
   var screen = "start";
-  var autoPlay = false;
-
+  var autoPlay;
   // one-time setup
   let interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
   $(document).on('keydown', handleKeyDown);                           // change 'eventType' to the type of event you want to handle
@@ -333,7 +332,11 @@ score(rightScore);
 function score(score){
   score.text += 1;
   score.id.text(score.text)
+  if(autoPlay === true){
+    startGame();
+  }else if (autoPlay === false){
   stopGame();
+}
 }
 //detects and handles when someone wins
 function winDetection(){
@@ -342,17 +345,15 @@ function winDetection(){
     $("#winText").text("Left Won");
     screen = "win";
     $("#instructions").hide();
-    stopGame();
+    stopGame
+    
   }
   if(rightScore.text >= winScore){
     $("#winText").text("Right Won");  
   screen = "win";
   $("#instructions").hide();
-  if(autoPlay === true){startGame();
-    console.log("d");
-  }else{
   stopGame();
-  }
+  
     }
 
 
