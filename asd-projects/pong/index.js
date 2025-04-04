@@ -36,6 +36,7 @@ function runProgram(){
   var ballStartSpeed = 5;
   var paddleSpeed = 5;
   var screen = "start";
+  var autoPlay = false;
 
   // one-time setup
   let interval = setInterval(newFrame, FRAMES_PER_SECOND_INTERVAL);   // execute newFrame every 0.0166 seconds (60 Frames per second)
@@ -50,6 +51,9 @@ function runProgram(){
     ballStartSpeed = changeVar(ballStartSpeed,"#startBallSpeed");
     paddleSpeed = changeVar(paddleSpeed,"#paddleSpeed");
     screen = "board";
+    autoPlay = $("#autoPlay").is(":checked")
+    console.log(autoPlay);
+
   })
 
   ////////////////////////////////////////////////////////////////////////////////
@@ -135,10 +139,12 @@ function runProgram(){
 //handles which screen is being displayed
   function screenLogic(){
     if(screen == "start"){
+      $("#scoreList").hide();
       $("#board").hide();
       $("#startBoard").show();
       $("#winBoard").hide();
     }else if(screen == "board"){
+      $("#scoreList").show();
       $("#startBoard").hide();
       $("#board").show();
       $("#winBoard").hide();
@@ -198,14 +204,7 @@ function handleGameModes(){
 
 
 //this sets the starting variables and begins the game
-function startGame(){
-ball.x = 250;
-ball.y = 250;
-ball.speedX = ballStartSpeed;
-ball.speedY = ballStartSpeed/5;
 
-
-}
 //creates an object for the game item described
 function makeGameItem(id,x,y,speedX,speedY){
   return{
@@ -349,7 +348,11 @@ function winDetection(){
     $("#winText").text("Right Won");  
   screen = "win";
   $("#instructions").hide();
+  if(autoPlay === true){startGame();
+    console.log("d");
+  }else{
   stopGame();
+  }
     }
 
 
@@ -367,13 +370,20 @@ function restartButton(){
   screen = "board";
   $("#instructions").show();
 }
+//starts the game
+function startGame(){
+  ball.x = 250;
+  ball.y = 250;
+  ball.speedX = ballStartSpeed;
+  ball.speedY = ballStartSpeed/5;
+  }
+
 //stops the ball from moving
 function stopGame(){
 ball.x = 250;
 ball.y = 250;
 ball.speedX = 0;
 ball.speedY = 0;
-console.log("f")
 
 }
 //turns off the game
