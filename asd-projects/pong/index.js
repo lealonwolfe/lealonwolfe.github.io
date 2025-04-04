@@ -345,7 +345,7 @@ function winDetection(){
     $("#winText").text("Left Won");
     screen = "win";
     $("#instructions").hide();
-    stopGame
+    stopGame();
     
   }
   if(rightScore.text >= winScore){
