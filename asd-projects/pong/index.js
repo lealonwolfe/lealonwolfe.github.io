@@ -78,13 +78,13 @@ function runProgram(){
  
   if(gameMode === "2P"){
     if(event.which === KEY.UP){
-      rightPaddle.speedY = -5;
+      rightPaddle.speedY = -paddleSpeed;
     }
     
   
     
     if(event.which === KEY.DOWN){
-      rightPaddle.speedY = 5;
+      rightPaddle.speedY = paddleSpeed;
     }
   }
     
@@ -92,10 +92,10 @@ function runProgram(){
     
     
     if(event.which === KEY.W){
-      leftPaddle.speedY = -5;
+      leftPaddle.speedY = -paddleSpeed;
     }
     if(event.which === KEY.S){
-      leftPaddle.speedY = 5;
+      leftPaddle.speedY = paddleSpeed;
     }
  
     if(event.which === KEY.SPACE){
@@ -104,7 +104,7 @@ function runProgram(){
       }
     }
     if(event.which === KEY.ESC){
-      endGame();
+      reloadGame();
     }
   }
   function handleKeyUp(event){
@@ -188,10 +188,7 @@ function handleGameModes(){
     if(ball.x > (BOARD_WIDTH/2)){
       if(ball.y < rightPaddle.topY ){rightPaddle.speedY = -5;}
       if(ball.y > rightPaddle.bottomY){rightPaddle.speedY = 5;}
-      if(ball.y> rightPaddle.topY && ball.y < rightPaddle.bottomY){rightPaddle.speedY = 0;}
-      
-        
-      
+      if(ball.y> rightPaddle.topY && ball.y < rightPaddle.bottomY){rightPaddle.speedY = 0;}  
     }else {rightPaddle.speedY = 0;}
   }
 
@@ -338,60 +335,73 @@ function score(score){
   stopGame();
 }
 }
-//detects and handles when someone wins
-function winDetection(){
+  //detects and handles when someone wins
+  function winDetection(){
 
-  if(leftScore.text >= winScore){
-    $("#winText").text("Left Won");
-    screen = "win";
-    $("#instructions").hide();
-    stopGame();
-    
-  }
-  if(rightScore.text >= winScore){
-    $("#winText").text("Right Won");  
-  screen = "win";
-  $("#instructions").hide();
-  stopGame();
-  
+    if(leftScore.text >= winScore){
+      $("#winText").text("Left Won");
+      screen = "win";
+      $("#instructions").hide();
+      stopGame();
+      
     }
+    if(rightScore.text >= winScore){
+      $("#winText").text("Right Won");  
+      screen = "win";
+      $("#instructions").hide();
+      stopGame();
+    
+      }
 
 
-}
-//handles the logic of the restart button
-function restartButton(){
-  console.log("game reset, scores - left: " + leftScore.text + " right: " + rightScore.text);
-  $("#list").append($("<li>", { text: "left: " + leftScore.text + " right: " + rightScore.text }));
-  ball.x = 250;
-  ball.y = 250;
-  leftScore.text = 0;
-  rightScore.text = 0;
-  leftScore.id.text("0");
-  rightScore.id.text("0");
-  screen = "board";
-  $("#instructions").show();
-}
-//starts the game
-function startGame(){
-  ball.x = 250;
-  ball.y = 250;
-  ball.speedX = ballStartSpeed;
-  ball.speedY = ballStartSpeed/5;
+  }
+  //handles the logic of the restart button
+  function restartButton(){
+    console.log("game reset, scores - left: " + leftScore.text + " right: " + rightScore.text);
+    $("#list").append($("<li>", { text: "left: " + leftScore.text + " right: " + rightScore.text }));
+    ball.x = 250;
+    ball.y = 250;
+    leftScore.text = 0;
+    rightScore.text = 0;
+    leftScore.id.text("0");
+    rightScore.id.text("0");
+    screen = "board";
+    $("#instructions").show();
+  }
+  //starts the game
+  function startGame(){
+    ball.x = 250;
+    ball.y = 250;
+    ball.speedX = ballStartSpeed;
+    ball.speedY = ballStartSpeed/5;
   }
 
-//stops the ball from moving
-function stopGame(){
-ball.x = 250;
-ball.y = 250;
-ball.speedX = 0;
-ball.speedY = 0;
+  //stops the ball from moving
+  function stopGame(){
+    ball.x = 250;
+    ball.y = 250;
+    ball.speedX = 0;
+    ball.speedY = 0;
 
-}
+  }
+  function reloadGame(){
+     leftPaddle = makeGameItem("#leftPaddle",50,(BOARD_HEIGHT/2) - ($("#rightPaddle").height() / 2),0,0)
+     rightPaddle = makeGameItem("#rightPaddle",BOARD_WIDTH- $("#rightPaddle").width()- 50,(BOARD_HEIGHT/2) - ($("#rightPaddle").height() / 2),0,0)
+     leftScore = makeTextObj("#leftScore")
+     rightScore = makeTextObj("#rightScore")
+     ball = makeGameItem("#ball",(BOARD_HEIGHT/2) - ($("#ball").width() / 2),(BOARD_HEIGHT/2) - ($("#ball").height() / 2),0,0)
+     gameMode = "2P"
+     winScore = 7;
+     ballStartSpeed = 5;
+     paddleSpeed = 5;
+     screen = "start";
+  }
+
 //turns off the game
-function endGame() {
+  function endGame() {
     // stop the interval timer
-   clearInterval(interval);
+    clearInterval(interval);
     // turn off event handlers
-   $(document).off();
+    $(document).off();
   }
 }
